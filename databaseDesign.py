@@ -1,6 +1,12 @@
 import sqlite3
 from model import *
 
+'''
+    Creating myPlaylist table using sqlite3 that will do an auto increment on the musicID because i set it
+    to be INTEGER PRIMARY KEY
+    Then Insert the result received from spotify api into myPlaylist table
+'''
+
 class DatabaseManager:
 
     def __init__(self,filename):
