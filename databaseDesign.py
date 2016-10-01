@@ -27,11 +27,11 @@ class DatabaseManager:
             INSERT INTO myPlaylist VALUES (NULL, 'No Limit', 'Usher', 'Single Album'); '''
 
         try:
-            print("Creating myPlaylistTable...")
+            print("Creating myPlaylistTable...\n")
             self.conn.executescript(table_script)
-            print("Table successfully created")
+            print("Table successfully created\n")
         except sqlite3.OperationalError as eo:
-            print("Error: ", eo)
+            print("Error: ", eo,"\n")
 
     def populate_database(self,music_id, title,artist, album):
         """Getting info from the Spotify api then populate the database"""

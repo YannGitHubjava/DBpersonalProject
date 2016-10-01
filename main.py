@@ -1,5 +1,7 @@
 from databaseDesign import DatabaseManager
 from api_setup import *
+from voiceRec import *
+import pyaudio
 
 '''Music search history that saving everything in table called myPlaylist to create music_info.db file,
     that pulls data from the Spotify API
@@ -14,13 +16,29 @@ def main():
 
         #Getting user decision to start or quit the program then print the table
 
-        user_choice = str(input("Do you want to enter data in music table: "))
+        user_choice = str(input("Do you want to enter data in music table: \n"))
 
         if user_choice.upper() == "YES":
 
-            #if the user type "yes" then do this
+            search_result = ''
+            while True:
 
-            search_result = input("enter the artist name:")
+                # if the user type "yes" then do this
+                text_result = input("Type an artist name or press Enter to Skip for Voice Input: \n")
+                if text_result:
+                    search_result = text_result
+                    break
+
+                # Getting the voice recognition words and save in a variable
+
+                voice_word = voice_input()
+                if voice_word:
+                    search_result = voice_word
+                    break
+
+                else:
+                    continue
+
 
             # Pass the user parameter as argument to spotify method
             # from api_setup.py file and return values
@@ -36,14 +54,14 @@ def main():
             try:
                 print("the music result: " + str(id) + title + artist + album)
                 db.populate_database(id, title, artist, album)
-                print("data successfully input")
+                print("data successfully input\n")
 
             #if the result wasn't find
             #or the can't be pushed for some reason
             #print an error message
             except Exception:
                 print("No result for this Search. Try again.\n" +
-                      "Failed to input in music database")
+                      "Failed to input in music database\n")
 
 
         # Quit the program if the user input anything but "yes"
@@ -52,7 +70,7 @@ def main():
         else:
             break
     result = db.display_info()
-    print("Here is your database copy")
+    print("Here is your database copy\n")
     for music in result:
         print(str(music.id) + "  " + "  " + music.title + "  " + music.artist + "      " + music.album)
 
