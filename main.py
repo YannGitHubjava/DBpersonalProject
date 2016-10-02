@@ -71,7 +71,8 @@ def main():
             break
     result = db.display_info()
     print("Here is your database copy\n")
+    print("%2s%60s%60s%60s\n" % ("ID", "TITLE", "ARTIST", "ALBUM_NAME"))
     for music in result:
-        print(str(music.id) + "  " + "  " + music.title + "  " + music.artist + "      " + music.album)
+        print("%2d%60s%60s%60s" % (music.id, music.title, music.artist, music.album))
 
 main()
