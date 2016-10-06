@@ -21,20 +21,20 @@ def main():
 
         if user_choice.upper() == "YES":
 
-            search_result = ''
+            what_to_find = ''
             while True:
 
                 # if the user type "yes" then do this
                 text_result = input("Type an artist name or press Enter to Skip for Voice Input: \n")
                 if text_result:
-                    search_result = text_result
+                    what_to_find = text_result
                     break
 
                 # Getting the voice recognition words and save in a variable
 
                 voice_word = voice_input()
                 if voice_word:
-                    search_result = voice_word
+                    what_to_find = voice_word
                     break
 
                 else:
@@ -50,7 +50,7 @@ def main():
             # id = None
 
             # for now just use the first result in the array
-            firstresult = search_tracks(search_result)[0]
+            firstresult = search_tracks(what_to_find)[0]
             # create a music_result object from the data
             my_song = firstresult
 
