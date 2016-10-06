@@ -1,4 +1,5 @@
-import spotipy
+import spotipy, model
+from pprint import pprint
 
 '''
 Credit info to Spotify Web API Documenttation
@@ -38,7 +39,25 @@ def search_track(value):
         return item['name']
 
 
+def search_albums_by_artist(artist_name):
+    song_list = []
+    testres=(sp.search(q=artist_name, limit=5))
+    song_results = testres['tracks']['items']
+    # counter to iterate through list of songs
+    i=0
+    for song in song_results:
+        song_title = (song['name'])
+        album_title = (song['album']['name'])
+        artist = (song['artists'][0]['name'])
+        this_song = model.music_result(None, song_title, album_title, artist)
+        song_list.append(this_song)
+        # increment our counter
+        i += 1
+    #pprint(testres)
+    return song_list
 
+# slist = (search_albums_by_artist("Madonna"))
+# for entry in slist:
+#     print(str(entry))
 
-
-
+# pprint(sp.search(q="Madonna", limit=5))

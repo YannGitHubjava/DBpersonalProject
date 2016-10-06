@@ -1,6 +1,7 @@
 from databaseDesign import DatabaseManager
 from api_setup import *
 from voiceRec import *
+from model import *
 import pyaudio
 
 '''Music search history that saving everything in table called myPlaylist to create music_info.db file,
@@ -47,13 +48,15 @@ def main():
             artist = search_artist(search_result)
             album = search_album(search_result)
             id = None
+            # create a music_result object from the data
+            my_song = music_result(id,title,artist,album)
 
             # Here is some exception handling that check for the Spotify api result
             # then tell us if the result was found
             #then push it to the database
             try:
-                print("the music result: " + str(id) + title + artist + album)
-                db.populate_database(id, title, artist, album)
+                print("the music result: " + str(my_song))
+                db.populate_database(my_song.id, my_song.title, my_song.artist, my_song.album)
                 print("data successfully input\n")
 
             #if the result wasn't find

@@ -8,3 +8,6 @@ class music_result:
         self.title = title
         self.artist = artist
         self.album = album
+
+    def __str__(self):
+        return str(self.id) + " / " + self.title + " / " + self.artist + " / " + self.album
