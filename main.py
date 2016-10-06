@@ -8,6 +8,19 @@ import pyaudio
     that pulls data from the Spotify API
     '''
 
+def get_user_selection(track_list):
+    # this presents users with a list of track so user can pick which album to work with
+    track_count = len(track_list)
+    for i in range(track_count):
+        print (str(i) + " " + str(track_list[i]))
+    user_choice = input("Which track would you like to import?")
+    # there has to be a way to combine these into a single while statement, but I couldn't figure that out.
+    while not user_choice.isnumeric():
+        user_choice = input("You have not made a valid selection.  Which track would you like to import?")
+    while int(user_choice) not in range(0,track_count):
+        user_choice = input("You have not made a valid selection.  Which track would you like to import?")
+    return track_list[int(user_choice)]
+
 def main():
     # Setting up database and give it the name "music_info"
 
@@ -50,9 +63,9 @@ def main():
             # id = None
 
             # for now just use the first result in the array
-            firstresult = search_tracks(what_to_find)[0]
+            tracks_found = search_tracks(what_to_find)
             # create a music_result object from the data
-            my_song = firstresult
+            my_song = get_user_selection(tracks_found)
 
             # Here is some exception handling that check for the Spotify api result
             # then tell us if the result was found

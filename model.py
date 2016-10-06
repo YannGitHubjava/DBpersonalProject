@@ -10,4 +10,6 @@ class music_result:
         self.album = album
 
     def __str__(self):
-        return str(self.id) + " / " + self.title + " / " + self.artist + " / " + self.album
+        idstring = str(self.id)
+        if idstring == "None": idstring = "--"
+        return idstring + " / " + self.title + " / " + self.artist + " / " + self.album
