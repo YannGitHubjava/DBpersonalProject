@@ -43,13 +43,16 @@ def main():
 
             # Pass the user parameter as argument to spotify method
             # from api_setup.py file and return values
+            '''these don't do quite what Yannick intended, but they can be repurposed for more targeted searches'''
+            # title = search_track(search_result)
+            # artist = search_artist(search_result)
+            # album = search_album(search_result)
+            # id = None
 
-            title = search_track(search_result)
-            artist = search_artist(search_result)
-            album = search_album(search_result)
-            id = None
+            # for now just use the first result in the array
+            firstresult = search_tracks(search_result)[0]
             # create a music_result object from the data
-            my_song = music_result(id,title,artist,album)
+            my_song = firstresult
 
             # Here is some exception handling that check for the Spotify api result
             # then tell us if the result was found
