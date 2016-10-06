@@ -1,11 +1,25 @@
 from databaseDesign import DatabaseManager
 from api_setup import *
 from voiceRec import *
+from model import *
 import pyaudio
 
 '''Music search history that saving everything in table called myPlaylist to create music_info.db file,
     that pulls data from the Spotify API
     '''
+
+def get_user_selection(track_list):
+    # this presents users with a list of track so user can pick which album to work with
+    track_count = len(track_list)
+    for i in range(track_count):
+        print (str(i) + " " + str(track_list[i]))
+    user_choice = input("Which track would you like to import?")
+    # there has to be a way to combine these into a single while statement, but I couldn't figure that out.
+    while not user_choice.isnumeric():
+        user_choice = input("You have not made a valid selection.  Which track would you like to import?")
+    while int(user_choice) not in range(0,track_count):
+        user_choice = input("You have not made a valid selection.  Which track would you like to import?")
+    return track_list[int(user_choice)]
 
 def main():
     # Setting up database and give it the name "music_info"
@@ -20,20 +34,20 @@ def main():
 
         if user_choice.upper() == "YES":
 
-            search_result = ''
+            what_to_find = ''
             while True:
 
                 # if the user type "yes" then do this
                 text_result = input("Type an artist name or press Enter to Skip for Voice Input: \n")
                 if text_result:
-                    search_result = text_result
+                    what_to_find = text_result
                     break
 
                 # Getting the voice recognition words and save in a variable
 
                 voice_word = voice_input()
                 if voice_word:
-                    search_result = voice_word
+                    what_to_find = voice_word
                     break
 
                 else:
@@ -42,18 +56,23 @@ def main():
 
             # Pass the user parameter as argument to spotify method
             # from api_setup.py file and return values
+            '''these don't do quite what Yannick intended, but they can be repurposed for more targeted searches'''
+            # title = search_track(search_result)
+            # artist = search_artist(search_result)
+            # album = search_album(search_result)
+            # id = None
 
-            title = search_track(search_result)
-            artist = search_artist(search_result)
-            album = search_album(search_result)
-            id = None
+            # for now just use the first result in the array
+            tracks_found = search_tracks(what_to_find)
+            # create a music_result object from the data
+            my_song = get_user_selection(tracks_found)
 
             # Here is some exception handling that check for the Spotify api result
             # then tell us if the result was found
             #then push it to the database
             try:
-                print("the music result: " + str(id) + title + artist + album)
-                db.populate_database(id, title, artist, album)
+                print("the music result: " + str(my_song))
+                db.populate_database(my_song.id, my_song.title, my_song.artist, my_song.album)
                 print("data successfully input\n")
 
             #if the result wasn't find

@@ -8,3 +8,8 @@ class music_result:
         self.title = title
         self.artist = artist
         self.album = album
+
+    def __str__(self):
+        idstring = str(self.id)
+        if idstring == "None": idstring = "--"
+        return idstring + " / " + self.title + " / " + self.artist + " / " + self.album
