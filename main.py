@@ -8,6 +8,9 @@ import pyaudio
     that pulls data from the Spotify API
     '''
 
+'''
+methods used in main()
+'''
 def get_user_selection(track_list):
     # this presents users with a list of track so user can pick which album to work with
     track_count = len(track_list)
@@ -20,7 +23,26 @@ def get_user_selection(track_list):
     while int(user_choice) not in range(0,track_count):
         user_choice = input("You have not made a valid selection.  Which track would you like to import?")
     return track_list[int(user_choice)]
+# end get_user_selection
 
+def add_to_database(db, my_song):
+    try:
+        print("the music result: " + str(my_song))
+        db.populate_database(my_song.id, my_song.title, my_song.artist, my_song.album)
+        print("data successfully input\n")
+
+    # if the result wasn't find
+    # or the can't be pushed for some reason
+    # print an error message
+    except Exception:
+        print("No result for this Search. Try again.\n" +
+              "Failed to input in music database\n")
+# end add_to_database
+
+
+'''
+main method of program
+'''
 def main():
     # Setting up database and give it the name "music_info"
 
@@ -70,28 +92,20 @@ def main():
             # Here is some exception handling that check for the Spotify api result
             # then tell us if the result was found
             #then push it to the database
-            try:
-                print("the music result: " + str(my_song))
-                db.populate_database(my_song.id, my_song.title, my_song.artist, my_song.album)
-                print("data successfully input\n")
-
-            #if the result wasn't find
-            #or the can't be pushed for some reason
-            #print an error message
-            except Exception:
-                print("No result for this Search. Try again.\n" +
-                      "Failed to input in music database\n")
-
-
+            add_to_database(db, my_song)
         # Quit the program if the user input anything but "yes"
         #then print the database "music_info.db
 
         else:
             break
+
     result = db.display_info()
     print("Here is your database copy\n")
     print("%2s%60s%60s%60s\n" % ("ID", "TITLE", "ARTIST", "ALBUM_NAME"))
     for music in result:
         print("%2d%60s%60s%60s" % (music.id, music.title, music.artist, music.album))
+
+
+
 
 main()
