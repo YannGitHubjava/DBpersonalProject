@@ -84,8 +84,13 @@ def main():
             # album = search_album(search_result)
             # id = None
 
-            # for now just use the first result in the array
+            # find matches based on user input
             tracks_found = search_tracks(what_to_find)
+            # check that there are results, else report none found and loop back to beginning
+            if not (len(tracks_found) > 0):
+                print("No results found. Please try again.")
+                continue
+
             # create a music_result object from the data
             my_song = get_user_selection(tracks_found)
 
