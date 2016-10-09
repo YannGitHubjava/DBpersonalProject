@@ -43,7 +43,6 @@ def search_tracks(search_string,search_type=None):
     # this just returns results based on whatever search stirng the user enters
     # it could be an artist's name, an album title, or even a specific song.
     track_list = []  # this stores the list of results
-    print(search_type)
     if search_type is not None:
         # if a search type is specified, prefix it to the search string
         # see https://developer.spotify.com/web-api/search-item/
