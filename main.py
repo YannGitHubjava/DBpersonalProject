@@ -8,19 +8,30 @@ import pyaudio
     that pulls data from the Spotify API
     '''
 
+# some global values so we only have to fix code once if we find a typo in string value
+BY_ARTIST = 'artist'
+BY_ALBUM = 'album'
+BY_TRACK_TITLE = 'track'
+
+
 '''
 methods used in main()
 '''
+def isValidTrackChoice(tocheck,range):
+    # TODO we also need to reject non-integers
+    if tocheck.isnumeric():
+        return int(tocheck) in range
+    return False
+
 def get_user_selection(track_list):
     # this presents users with a list of track so user can pick which album to work with
     track_count = len(track_list)
     for i in range(track_count):
         print (str(i) + " " + str(track_list[i]))
-    user_choice = input("Which track would you like to import?")
+    user_choice = input("Which track would you like to import (type 'exit' (no quotes) to exit)?")
     # there has to be a way to combine these into a single while statement, but I couldn't figure that out.
-    while not user_choice.isnumeric():
-        user_choice = input("You have not made a valid selection.  Which track would you like to import?")
-    while int(user_choice) not in range(0,track_count):
+    if user_choice == 'exit': return None
+    while not isValidTrackChoice(user_choice,range(0,track_count)):
         user_choice = input("You have not made a valid selection.  Which track would you like to import?")
     return track_list[int(user_choice)]
 # end get_user_selection

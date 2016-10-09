@@ -39,10 +39,15 @@ def search_track(value):
         return item['name']
 
 
-def search_tracks(search_string):
+def search_tracks(search_string,search_type=None):
     # this just returns results based on whatever search stirng the user enters
     # it could be an artist's name, an album title, or even a specific song.
     track_list = []  # this stores the list of results
+    if search_type is not None:
+        # if a search type is specified, prefix it to the search string
+        # see https://developer.spotify.com/web-api/search-item/
+        search_string = search_type + ":" + search_string
+        print(search_string)
     tracksfound=(sp.search(q=search_string, limit=5))
     # debugging: pprint(tracksfound)
     tracks = tracksfound['tracks']['items']
@@ -59,8 +64,13 @@ def search_tracks(search_string):
 '''
 debugging/testing
 '''
-# slist = (search_albums_by_artist("Madonna"))
-# for entry in slist:
-#     print(str(entry))
+if __name__ == "__main__":
+    #this works
+    slist = (search_tracks("Madonna"))
+    for entry in slist:
+        print(entry.artist)
 
-# pprint(sp.search(q="Madonna", limit=5))
+    # but this doesn't??
+    slist = (search_tracks("Madonna","artist"))
+    for entry in slist:
+        print(entry.artist)
