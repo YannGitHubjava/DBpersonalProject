@@ -47,7 +47,7 @@ def search_tracks(search_string,search_type=None):
         # if a search type is specified, prefix it to the search string
         # see https://developer.spotify.com/web-api/search-item/
         search_string = search_type + ":" + search_string
-        print(search_string)
+        # debugging: print(search_string)
     tracksfound=(sp.search(q=search_string, limit=5))
     # debugging: pprint(tracksfound)
     tracks = tracksfound['tracks']['items']
