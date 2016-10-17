@@ -1,6 +1,7 @@
 from databaseDesign import DatabaseManager
 from api_setup import *
 from voiceRec import *
+from menus import *
 from model import *
 import pyaudio
 
@@ -12,10 +13,7 @@ import pyaudio
 BY_ARTIST = 'artist'  # these three are static values passed as parameters to search_tracks
 BY_ALBUM = 'album'
 BY_TRACK_TITLE = 'track'
-OPT_GENERAL = '1'   # these four are menu options for search type
-OPT_ARTIST = '2'
-OPT_ALBUM = '3'
-OPT_TRACK = '4'
+
 
 '''
 methods used in main()
@@ -40,7 +38,8 @@ def get_search_term():
     while True:
 
         # if the user type "yes" then do this
-        text_result = input("Type an artist name or press Enter to Skip for Voice Input: \n")
+        display_artist_input()
+        text_result = input()
         if text_result:
             what_to_find = text_result
             break
@@ -64,26 +63,25 @@ def get_search_type():
     or just a general text search
     :return: a global variable that stores a string indicating a particular search type
     '''
-    menu = "What field would you like to search?\n"
-    menu += "\t" + OPT_GENERAL + ". Search all fields\n"
-    menu += "\t" + OPT_ARTIST + ". Search in artist name field\n"
-    menu += "\t" + OPT_ALBUM + ". Search in album title field\n"
-    menu += "\t" + OPT_TRACK + ". Search in song/track title field\n"
-    menu += "> "
+    display_options_menu()
 
     while True:
         # keep soliciting input until a valid option is chosen.
-        type_selection = input(menu)
-        if type_selection == OPT_GENERAL:
+        choice = 0
+        try:
+            choice = int(input())
+        except ValueError:
+            display_error()
+        if choice == 1:
             return None
-        elif type_selection == OPT_ARTIST:
+        elif choice == 2:
             return BY_ARTIST
-        elif type_selection == OPT_ALBUM:
+        elif choice == 3:
             return BY_ALBUM
-        elif type_selection == OPT_TRACK:
+        elif choice == 4:
             return BY_TRACK_TITLE
-        else:
-            print("You have not made a valid selection.  Please try again.")
+
+
 # end get_search_type
 
 def get_user_selection(track_list):
@@ -95,12 +93,16 @@ def get_user_selection(track_list):
     track_count = len(track_list)
     for i in range(track_count):
         print (str(i) + " " + str(track_list[i]))
-    user_choice = input("Which track would you like to import (type 'exit' (no quotes) to exit)?\n> ")
+    display_track_import()
+    user_choice = str(input())
     # there has to be a way to combine these into a single while statement, but I couldn't figure that out.
-    if user_choice == 'exit': return None
-    while not isValidTrackChoice(user_choice,range(0,track_count)):
-        user_choice = input("You have not made a valid selection.  Which track would you like to import?\n> ")
-    return track_list[int(user_choice)]
+    if user_choice.upper() == 'EXIT':
+        return None
+    else:
+        while not isValidTrackChoice(user_choice,range(0,track_count)):
+            display_error_2()
+            user_choice = input()
+        return track_list[int(user_choice)]
 # end get_user_selection
 
 def add_to_database(db, my_song):
@@ -126,11 +128,15 @@ def main():
 
     db = DatabaseManager("music_info")
     db.setup_db()
+    display_initial_message()
+
     while True:
 
         #Getting user decision to start or quit the program then print the table
 
-        user_choice = str(input("Do you want to enter data in music table: \n> "))
+
+        display_music_query()
+        user_choice = str(input())
 
         if user_choice.upper() == "YES":
             # get the search string for Spotify
@@ -157,9 +163,11 @@ def main():
         # Quit the program if the user input anything but "yes"
         #then print the database "music_info.db
 
-        else:
+        elif user_choice.upper() == "NO":
             # if the user typed in anything other than "yes", break out of the while loop and exit the program.
             break
+        else:
+            display_error()
 
     result = db.display_info()
     print("Here is your database copy\n")
